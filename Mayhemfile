@@ -1,8 +1,7 @@
 project: normality
-target: normality
+target: fuzz
 
-image: ghcr.io/ebell495/normality:latest
-duration: 300
+tests: null
 
 cmds:
     - cmd: fuzz/fuzz.py
