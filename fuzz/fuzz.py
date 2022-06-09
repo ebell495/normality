@@ -5,34 +5,29 @@ from normality import normalize, slugify, collapse_spaces, ascii_text, latinize_
 
 @atheris.instrument_func
 def TestOneInput(data):
-    barray = bytearray(data)
-    if len(barray) > 0:
-        if barray[0] % 8 == 0:
-            del barray[0]
-            normalize(str(barray))
-        elif barray[0] % 8 == 1:
-            del barray[0]
-            slugify(str(barray))
-        elif barray[0] % 8 == 2:
-            del barray[0]
-            collapse_spaces(str(barray))
-        elif barray[0] % 8 == 3:
-            del barray[0]
-            ascii_text(str(barray))
-        elif barray[0] % 8 == 4:
-            del barray[0]
-            latinize_text(str(barray))
-        elif barray[0] % 8 == 5:
-            del barray[0]
-            stringify(str(barray))
-        elif barray[0] % 8 == 6:
-            del barray[0]
-            predict_encoding(bytes(barray))
-        elif barray[0] % 8 == 7:
-            del barray[0]
-            guess_encoding(bytes(barray))
-    else:
-        pass
+    fdp = atheris.FuzzedDataProvider(data)
+    if len(data) < 1:
+        return
+
+    option = fdp.ConsumeBytes(1)[0]
+    in_string = fdp.ConsumeUnicodeNoSurrogates(len(data))
+
+    if option % 8 == 0:
+        normalize(in_string)
+    elif option % 8 == 1:
+        slugify(in_string)
+    elif option % 8 == 2:
+        collapse_spaces(in_string)
+    elif option % 8 == 3:
+        ascii_text(in_string)
+    elif option % 8 == 4:
+        latinize_text(in_string)
+    elif option % 8 == 5:
+        stringify(in_string)
+    elif option % 8 == 6:
+        predict_encoding(bytes(in_string, 'utf-8'))
+    elif option % 8 == 7:
+        guess_encoding(bytes(in_string, 'utf-8'))
 
 
 atheris.instrument_all()
