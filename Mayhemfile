@@ -1,7 +1,7 @@
 project: normality
-target: fuzz
+target: normalization-fuzz
 
 cmds:
-    - cmd: fuzz/fuzz.py
+    - cmd: fuzz/normalization-fuzz.py
       libfuzzer: true 
       
